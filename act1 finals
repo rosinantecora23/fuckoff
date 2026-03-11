@@ -1,0 +1,84 @@
+
+<head>
+   
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        input {
+            margin: 5px 0;
+            padding: 5px;
+        }
+        .submit {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            cursor: pointer;
+        }
+
+
+
+
+    </style>
+
+</head>
+<body>
+    <div class="">
+        <form method="POST">
+            First name: <input type="text" name="fname" placeholder="Firstname"><br>
+            Last name: <input type="text" name="Lname" placeholder="Lastname"><br>
+            Student Id: <input type="text" name="id" placeholder="Student Id"><br>
+            <input class="submit" type="submit" value="Submit">
+        </form>
+    </div>
+    <?php
+        $servername = "localhost";
+        $username = "root";
+        $password = "";
+        $dbname = "csdb";
+        $conn = mysqli_connect($servername, $username, $password, $dbname);
+
+        if(!$conn){
+            die("connection failed:".mysqli_connect_error());
+        }
+            echo "Yes, daddy, rob. I'm connected!";
+
+        $firstname = $_POST["fname"];
+        $lastname = $_POST["Lname"];
+        $studid = $_POST["id"];
+
+        $sql = "INSERT INTO cstbl(firstname, lastname, studid) VALUES('$firstname', '$lastname', '$studid);";
+        if(mysqli_query($conn, $sql)){
+            echo " Meron na";
+        }
+        else{
+            echo "Error: " .$sql. "<br>" .mysqli_error($conn);
+        }
+        
+        
+       $sql1 = "SELECT id, studid, firstname, lastname, reg_date FROM cstbl";
+       $result = mysqli_query($conn, $sql1);
+       if(mysqli_num_rows($result) > 0){
+        while($row = mysqli_fetch_assoc($result)){
+            echo "Number: " .$row["id"].
+                 "Firstname: " .$row["firstname"].
+                 "Lastname: " .$row["lastname"].
+                 "Student Id: " .$row["studid"].
+                 "Date: " .$row["reg_date"]. "<br>";
+        }
+       }
+       else{
+            echo "0 result";
+        }
+        mysqli_close($conn);
+            
+        
+
+    ?>
+</body>
+
