@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+body{
+    font-family: Arial, sans-serif;
+    margin: 20px;
+	
+}
+
+form{
+    border: 1px solid #ccc;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    width: 300px;
+    text-align: center;
+	margin-bottom: 10px;
+	margin-left: 550px;
+	margin-top: 15px;
+}
+
+
+input{
+    margin: 5px 0;
+    padding: 5px;
+}
+
+.grade{
+	margin-left: 28px;
+}
+
+.submit{
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    cursor: pointer;
+}
+
+/* Table styling */
+table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-top: 20px;
+}
+
+table th, table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+
+table th {
+    background-color: #4CAF50;
+    color: white;
+}
+
+table tr:nth-child(even){background-color: #f2f2f2;}
+
+table tr:hover {background-color: #ddd;}
+</style>
+</head>
+
+<body>
+
+	<div class="form-box">
+	<form method="POST">
+		First name: <input type="text" name="fname" placeholder="Firstname" required><br>
+		Last name: <input type="text" name="Lname" placeholder="Lastname" required><br>
+		Student Id: <input type="text" name="id" placeholder="Student Id" required><br>
+		Grade: <input class="grade" type="number" name="grade" placeholder="Grade" required><br>
+		<?php 
+			function gradeEquivalent($grade){
+            if($grade == 100 || $grade >= 97) return "1.00";
+            elseif($grade >= 94) return "1.25";
+            elseif($grade >= 91) return "1.50";
+            elseif($grade >= 88) return "1.75";
+            elseif($grade >= 85) return "2.00";
+            elseif($grade >= 82) return "2.25";
+            elseif($grade >= 79) return "2.50";
+            elseif($grade >= 76) return "2.75";
+            elseif($grade >= 75) return "3.00";
+            else return "5.00 (Fail)";
+        }
+		
+		if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        $grade = $_POST["grade"];
+        echo "Equivalent: " . gradeEquivalent($grade) . "<br>";
+		}
+		?>
+		<input class="submit" type="submit" value="Submit">
+	</form>
+	</div>
+
+	<?php
+
+		$servername = "localhost";
+		$username = "root";
+		$password = "";
+		$dbname = "csdb";
+
+		$conn = mysqli_connect($servername, $username, $password, $dbname);
+
+		if(!$conn){
+			die("Connection failed: ".mysqli_connect_error());
+		}
+
+		echo "Yes, g! Connected na.<br><br>";
+		
+		
+		
+		if($_SERVER["REQUEST_METHOD"] == "POST"){
+
+			$firstname = $_POST["fname"];
+			$lastname = $_POST["Lname"];
+			$studid = $_POST["id"];
+			$grade = $_POST["grade"];
+
+			// Check for duplicate student ID
+			$check = mysqli_query($conn, "SELECT * FROM cstbl WHERE studid='$studid'");
+			if(mysqli_num_rows($check) == 0){
+				// safe to insert
+				$sql = "INSERT INTO cstbl (firstname, lastname, studid, grade)
+						VALUES ('$firstname', '$lastname', '$studid', '$grade')";
+
+				if(mysqli_query($conn, $sql)){
+					echo "Meron na!<br><br>";
+				} else {
+					echo "Error: ".$sql."<br>".mysqli_error($conn);
+				}
+
+			} else {
+				//echo "Student ID already exists!<br><br>";
+			}
+		}
+		
+		
+		// Fetch all records
+		$sql1 = "SELECT id, studid, firstname, lastname, grade, reg_date FROM cstbl";
+		$result = mysqli_query($conn, $sql1);
+
+		if(mysqli_num_rows($result) > 0){
+
+			echo "<h3>Student Records</h3>";
+			echo "<table>";
+			echo "<tr>
+					<th>No.</th>
+					<th>First Name</th>
+					<th>Last Name</th>
+					<th>Student ID</th>
+					<th>Grade</th>
+					<th>Registration Date</th>
+				  </tr>";
+
+			while($row = mysqli_fetch_assoc($result)){
+				echo "<tr>
+						<td>".$row["id"]."</td>
+						<td>".$row["firstname"]."</td>
+						<td>".$row["lastname"]."</td>
+						<td>".$row["studid"]."</td>
+						<td>".$row["grade"]."</td>
+						<td>".$row["reg_date"]."</td>
+					  </tr>";
+			}
+
+			echo "</table>";
+
+		} else {
+			echo "No student records found.";
+		}
+
+		mysqli_close($conn);
+
+	?>
+</body>
+</html>
