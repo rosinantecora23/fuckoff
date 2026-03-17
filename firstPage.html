@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Portal Login</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background: #f5f5f5;
+    }
+    .container {
+      margin-top: 100px;
+    }
+    .role-card {
+      display: inline-block;
+      width: 220px;
+      height: 200px;
+      margin: 20px;
+      padding: 20px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      vertical-align: top;
+    }
+    .role-icon {
+      font-size: 50px;
+      margin-bottom: 10px;
+    }
+    .role-card h2 {
+      margin: 10px 0;
+    }
+    .role-btn {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background: #0078d7;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .role-btn:hover {
+      background: #005fa3;
+    }
+    .role-btn:active{
+      opacity: 0.8;
+    }
+    .footer {
+      margin-top: 50px;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Welcome to the Portal</h1>
+    <p>Please select your role to continue</p>
+    
+    <div class="role-card">
+      <div class="role-icon">🎓</div>
+      <h2>Student</h2>
+      <button class="role-btn" onclick="location.href='studentLogin.php'">Continue</button>
+    </div>
+    
+    <div class="role-card">
+      <div class="role-icon">📚</div>
+      <h2>Teacher</h2>
+      <button class="role-btn" onclick="location.href='teacher-login.html'">Continue</button>
+    </div>
+  </div>
+  
+  <div class="footer">
+    <a href="#">Need Help?</a> | <a href="#">Contact Support</a>
+  </div>
+</body>
+</html>
